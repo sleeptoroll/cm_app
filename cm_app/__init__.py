@@ -1,12 +1,14 @@
 # __init__.py文件用于初始化app
 # 包括通过工厂模式创建app，以及数据库配置信息
+import redis
+import logging
 
 from flask import Flask
 from config import config_map
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 from flask_wtf import CSRFProtect
-import redis
+from logging.handlers import RotatingFileHandler
 
 
 # mysql数据库
@@ -18,12 +20,24 @@ db = SQLAlchemy()
 redis_store = None
 
 
+# 设置日志的记录等级
+logging.basicConfig(level=logging.DEBUG)  # 分DEBUG，INFO，WARN，ERROR四种级别
+# 创建日志记录器，指明日志保存路径、每个日志文件最大大小、保存日志个数上限
+file_log_handler = RotatingFileHandler(
+    "logs/log", maxBytes=1024*1024*100, backupCount=6)
+# 创建日志记录的格式
+formatter = logging.Formatter(
+    '%(levelname)s %(filename)s:%(lineno)d %(message)s')
+# 为刚创建的日志记录器设置日志记录格式
+file_log_handler.setFormatter(formatter)
+# 为全局的日志工具对象（flask app使用的）添加日志记录器
+logging.getLogger().addHandler(file_log_handler)
+
+
 """ 使用工厂模式创建app
     定义创建app函数
     传入config类型名的（"development"，"production"）
 """
-
-# 工厂模式
 
 
 def create_app(config_name):
