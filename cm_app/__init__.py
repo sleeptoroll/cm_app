@@ -4,11 +4,10 @@
 from flask import Flask
 from config import config_map
 from flask_sqlalchemy import SQLAlchemy
-
 from flask_session import Session
 from flask_wtf import CSRFProtect
 import redis
-from cm_app import api_1_0
+
 
 # mysql数据库
 # 初始化名为db的SQLAlchemy对象,但不传入app参数（只定义不绑定app对象）
@@ -48,7 +47,10 @@ def create_app(config_name):
     # # 为flask补充csrf防护
     # CSRFProtect(app)
 
+    # 为了防止循环导入db的问题，在注册蓝图之前再导入.即什么时候注册蓝图，什么时候导入相关对象
+    from cm_app import api_1_0
+
     # 注册蓝图
     app.register_blueprint(api_1_0.api, url_prefix='/api/v1.0')
-    
+
     return app

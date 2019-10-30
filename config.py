@@ -13,7 +13,7 @@ class Config(object):
     SQLALCHEMY_ECHO = True
 
     # # redis数据库配置信息
-    # REDIS_HOST = "192.168.1.88"
+    # REDIS_HOST = "sleeptoroll.xyz"
     # REDIS_PORT = 6379
 
     # # flask-session配置信息
