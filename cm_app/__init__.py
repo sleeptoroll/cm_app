@@ -9,6 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 from flask_wtf import CSRFProtect
 from logging.handlers import RotatingFileHandler
+from cm_app.utils.commons import ReConverter
 
 
 # mysql数据库
@@ -64,7 +65,15 @@ def create_app(config_name):
     # 为了防止循环导入db的问题，在注册蓝图之前再导入.即什么时候注册蓝图，什么时候导入相关对象
     from cm_app import api_1_0
 
+    # 注册蓝图之前为flask引入自定义re转换器
+    # (from cm_app.utils.commons import ReConverter)
+    app.url_map.converters["re"] = ReConverter
+
     # 注册蓝图
     app.register_blueprint(api_1_0.api, url_prefix='/api/v1.0')
+
+    # 注册提供静态文件蓝图
+    from cm_app.web_html.web_html import html
+    app.register_blueprint(web_html.web_html.html) #此处不需要添加前缀url_prefix
 
     return app
