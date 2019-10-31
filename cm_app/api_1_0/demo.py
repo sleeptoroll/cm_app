@@ -1,5 +1,5 @@
 from . import api
-from cm_app import db
+from cm_app import db, models
 from flask import current_app
 import logging
 

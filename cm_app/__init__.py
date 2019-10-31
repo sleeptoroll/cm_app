@@ -21,7 +21,9 @@ db = SQLAlchemy()
 redis_store = None
 
 
-# 设置日志的记录等级
+# 设置日志的记录等级.*
+# 注意：如果在config_name=development设置为开发模式,会开启Debug=True
+# 这时无论日志等级为四种中的哪一种，都会自动覆盖日志等级为DEBUG
 logging.basicConfig(level=logging.DEBUG)  # 分DEBUG，INFO，WARN，ERROR四种级别
 # 创建日志记录器，指明日志保存路径、每个日志文件最大大小、保存日志个数上限
 file_log_handler = RotatingFileHandler(
